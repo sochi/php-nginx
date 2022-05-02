@@ -1,0 +1,13 @@
+version: '3.5'
+services:
+  app:
+    build: .
+    volumes:
+      - ./test/html:/app/public_html:ro
+  sut:
+    image: alpine:3.15
+    depends_on:
+      - app
+    command: /tmp/run_tests.sh
+    volumes:
+      - ./test/run_tests.sh:/tmp/run_tests.sh:ro
