@@ -9,7 +9,7 @@ The main points still apply. The image is:
 * running unprivileged Nginx and PHP-FPM from supervisord
 
 The respective changes include installing of `pdo_mysql` extentsion instead of
-MySQLi . And setting the default public directory differently to keep it closer
+MySQLi. And setting the default public directory differently to keep it closer
 to other images, such as `composer`.
 
 ## Extending the server
@@ -25,7 +25,7 @@ proxied to the service; for details see below.
 ## Configure Nginx public root
 
 The public root in Nginx is not set by default. Instead the configuration
-contains `/app/ROOT_DIR` placeholder which can be replaced with the desired
+contains `/app/public_html` placeholder which can be replaced with the desired
 directory.
 
 It can be replaced using, e.g., `sed`, as shown in the following `Dockerfile`
@@ -38,7 +38,7 @@ FROM soch1/php-nginx
 USER root
 
 # then replace the variable placeholder
-RUN sed -i -- "s/ROOT_DIR/your\/public\/dir/g" /etc/nginx/nginx.conf
+RUN sed -i -- "s/public_html/your\/public\/dir/g" /etc/nginx/nginx.conf
 
 # use non-root user again
 USER nobody
@@ -65,7 +65,7 @@ FROM soch1/php-nginx
 
 # update directory with publicly available content
 USER root
-RUN sed -i -- "s/ROOT_DIR/<your_directory>/g" /etc/nginx/nginx.conf
+RUN sed -i -- "s/public_html/<your_directory>/g" /etc/nginx/nginx.conf
 USER nobody
 
 WORKDIR /app
@@ -102,7 +102,7 @@ FROM soch1/php-nginx
 
 # update directory with publicly available content
 USER root
-RUN sed -i -- "s/ROOT_DIR/<your_directory>/g" /etc/nginx/nginx.conf
+RUN sed -i -- "s/public_html/<your_directory>/g" /etc/nginx/nginx.conf
 USER nobody
 
 COPY --chown=nginx --from=composer /app /app

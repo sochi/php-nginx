@@ -13,7 +13,7 @@ RUN apk add --no-cache \
 # setting log rotation to keep last 2 weeks
 RUN sed -ie -- "/rotate/s/[0-9]\+/14/g" /etc/logrotate.d/nginx
 
-# copy the default configuration with ROOT_DIR placeholder
+# copy the default configuration that uses public_html
 COPY config/nginx.conf /etc/nginx/nginx.conf
 # set process supervisor
 COPY config/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
