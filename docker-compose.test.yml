@@ -1,8 +1,8 @@
 version: '3.5'
 services:
   app:
-    # the variable used is documented in https://docs.docker.com/docker-hub/builds/advanced/
-    image: "${IMAGE_NAME:-soch1/php-nginx:latest}"
+    # https://docs.docker.com/docker-hub/builds/advanced/
+    image: "${IMAGE_NAME:-soch1/php-nginx:local}"
     build: .
     volumes:
       - ./test/html:/app/public_html:ro
