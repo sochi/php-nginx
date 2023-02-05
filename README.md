@@ -50,7 +50,7 @@ services:
   app:
     build: .
     volumes:
-      - ./path/to/www:/app
+      - ./local/path/to/www:/app
 ```
 
 The example above sets the public root to `/app/your/public/dir`.
