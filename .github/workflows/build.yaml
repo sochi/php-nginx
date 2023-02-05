@@ -9,7 +9,7 @@ on:
     branches:
       - 'main'
     tags:
-      - 'v*'
+      - '*'
   pull_request:
     branches:
       - 'main'
@@ -34,6 +34,8 @@ jobs:
           sleep 2
           docker-compose -f docker-compose.test.yml run sut
           docker-compose -f docker-compose.test.yml rm --force --stop
+        env:
+          IMAGE_NAME: ${{ github.repository }}:${{ github.sha }}
 
       - name: Login to Docker Hub
         if: github.event_name != 'pull_request'
