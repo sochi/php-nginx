@@ -1,11 +1,13 @@
 version: '3.5'
 services:
   app:
+    # the variable used is documented in https://docs.docker.com/docker-hub/builds/advanced/
+    image: "${IMAGE_NAME:-soch1/php-nginx:latest}"
     build: .
     volumes:
       - ./test/html:/app/public_html:ro
   sut:
-    image: alpine:3.15
+    image: alpine:3.17
     depends_on:
       - app
     command: /tmp/run_tests.sh
