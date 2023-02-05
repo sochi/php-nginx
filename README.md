@@ -1,4 +1,4 @@
-# Dockerize a PHP application
+# Dockerize a PHP Application
 
 This is extending image from https://github.com/trafex/docker-php-nginx with
 changes to ease containerising a PHP application, by using this image as base.
@@ -12,7 +12,7 @@ The respective changes include installing of `pdo_mysql` extentsion instead of
 MySQLi. And setting the default public directory differently to keep it closer
 to other images, such as `composer`.
 
-## Extending the server
+## Extend Server
 
 The repository already contains a default server configuration that might be
 sufficient in most cases. When necessary it can be extended (rather than
@@ -22,7 +22,7 @@ The default server only uses HTTP and listens on port 8080. This is done to ease
 the server configuration. HTTPS can be terminated before the requests are
 proxied to the service; for details see below.
 
-## Configure Nginx public root
+## Configure Nginx Public Root
 
 The public root in Nginx is not set by default. Instead the configuration
 contains `/app/public_html` placeholder which can be replaced with the desired
@@ -55,7 +55,7 @@ services:
 
 The example above sets the public root to `/app/your/public/dir`.
 
-### Use as base image
+### Use as Base Image
 
 The image defined in this repository is also expected to be used as base when
 defining other images.
@@ -72,12 +72,16 @@ WORKDIR /app
 COPY --chown=nobody <your_directory>/ /app
 
 # append other configuration to the server if necessary
+#
 # for instance we can set expiration headers for cache, or to disable access
 # logging on favicon.ico and robots.txt
-COPY <your_configuration_file>.conf /etc/nginx/conf.d/default.conf
+#
+# note the custom file extension used, this is to higlight the configuration is
+# extending the default rather than adding a new server block
+COPY <your_configuration_file>.conf /etc/nginx/conf.d/custom.default_conf
 ```
 
-### Usage with composer
+### Use with Composer
 
 With dependencies managed with [Composer](https://getcomposer.org/) the build
 definition could be changed to use a multi-stage build.
@@ -116,10 +120,10 @@ RUN mkdir log temp
 # append other configuration to the server if necessary
 # for instance we can set expiration headers for cache, or to disable access
 # logging on favicon.ico and robots.txt
-COPY <your_configuration_file>.conf /etc/nginx/conf.d/default.conf
+COPY <your_configuration_file>.conf /etc/nginx/conf.d/custom.default_conf
 ```
 
-## Running with HTTPS
+## Run with HTTPS
 
 A docker image containing both the PHP application and the HTTP server can be
 then started as service using `docker-compose`.
@@ -141,7 +145,7 @@ mapping the ports.
       - 80:8080
 ```
 
-### Proxy the requests
+### Proxy Requests
 
 With any advanced configuration needed, such as terminating HTTPS, a load
 balancer server should be started to terminate HTTPS, and to proxy the requests
@@ -162,7 +166,7 @@ location /api/ {
 
 The image can be downloaded from [Docker Hub](https://hub.docker.com/r/soch1/php-nginx).
 
-### Building locally
+### Build Locally
 
 If necessary the respective image can be build locally, instead of downloading
 it from the Docker Hub.
