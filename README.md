@@ -16,7 +16,7 @@ to other images, such as `composer`.
 
 The repository already contains a default server configuration that might be
 sufficient in most cases. When necessary it can be extended (rather than
-replaced completely) by providing one or more `.conf` files.
+replaced completely) by providing one or more `.default_conf` files.
 
 The default server only uses HTTP and listens on port 8080. This is done to ease
 the server configuration. HTTPS can be terminated before the requests are
@@ -28,6 +28,8 @@ The public root in Nginx is not set by default. Instead the configuration
 contains `/app/public_html` placeholder which can be replaced with the desired
 directory.
 
+The file that contains the placeholder is `/etc/nginx/conf.d/default.conf`.
+
 It can be replaced using, e.g., `sed`, as shown in the following `Dockerfile`
 and `docker-compose.yaml` example.
 
@@ -38,7 +40,7 @@ FROM soch1/php-nginx
 USER root
 
 # then replace the variable placeholder
-RUN sed -i -- "s/public_html/your\/public\/dir/g" /etc/nginx/nginx.conf
+RUN sed -i -- "s/public_html/your\/public\/dir/g" /etc/nginx/conf.d/default.conf
 
 # use non-root user again
 USER nobody
@@ -65,7 +67,7 @@ FROM soch1/php-nginx
 
 # update directory with publicly available content
 USER root
-RUN sed -i -- "s/public_html/<your_directory>/g" /etc/nginx/nginx.conf
+RUN sed -i -- "s/public_html/<your_directory>/g" /etc/nginx/conf.d/default.conf
 USER nobody
 
 WORKDIR /app
@@ -106,7 +108,7 @@ FROM soch1/php-nginx
 
 # update directory with publicly available content
 USER root
-RUN sed -i -- "s/public_html/<your_directory>/g" /etc/nginx/nginx.conf
+RUN sed -i -- "s/public_html/<your_directory>/g" /etc/nginx/conf.d/default.conf
 USER nobody
 
 COPY --chown=nginx --from=composer /app /app
@@ -118,8 +120,12 @@ WORKDIR /app
 RUN mkdir log temp
 
 # append other configuration to the server if necessary
+#
 # for instance we can set expiration headers for cache, or to disable access
 # logging on favicon.ico and robots.txt
+#
+# note the custom file extension used, this is to higlight the configuration is
+# extending the default rather than adding a new server block
 COPY <your_configuration_file>.conf /etc/nginx/conf.d/custom.default_conf
 ```
 
